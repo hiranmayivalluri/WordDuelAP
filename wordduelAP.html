@@ -1,9 +1,56 @@
 <html>
-    <h1>WordDuelAP</h1>
+<head>
+    <meta charset="UTF8"
+    <title>WordDuel</title>
+    <h1>Chapter 1</h1>
+    <style>
+        body{
+            font-family: fantasy;
+            background:turquoise;
+            padding: 40px;
+            text-align: center;
+        }
+        button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      margin: 10px;
+      cursor: pointer;
+    }
+    #status{
+        margin-top: 30px;
+        font-size: 1.3em;
+        color:darkblue ;
+    }
+    </style>
+</head>
     <body>
-       <p>This project is about a word building game involving two players Lexa and Syntax</p>
-       <h2>Select Your Role</h2>
+        <h2>The Summoning Scroll</h2>
+        <p>Choose your role to enter the arena</p>
            <button id="selectPlayer1">I am Player 1 (Lexa)</button>
            <button id="selectPlayer2">I am Player 2 (Syntax)</button>
+        <div id="status"></div>
+             <script>
+                 const scrollKey = 'duelPlayers';
+                 function chooseRole(role) {
+                 let players = JSON.parse(localStorage.getItem(scrollKey)) || {};     
+                 
+                     if (players[role]) {
+                 alert(`${role === 'player1' ? 'Lexa' : 'Syntax'} has already entered the arena in another portal!`);
+                 return;
+                 players[role] = true;
+               
+                         localStorage.setItem(scrollKey, JSON.stringify(players));
+                const name = role === 'player1' ? 'Lexa' : 'Syntax';
+                sessionStorage.setItem('myRole', role); // Remember this tab's role
+                 document.getElementById('status').textContent = `✅ ${name} has entered the arena.`;
+                }
+                window.onload = () => {
+                const role = sessionStorage.getItem('myRole');
+                if (role) {
+                const name = role === 'player1' ? 'Lexa' : 'Syntax';
+                 document.getElementById('status').textContent = `✅ ${name} has returned to the arena.`;
+                }
+                 };
+            </script>  
     </body>
 </html>
