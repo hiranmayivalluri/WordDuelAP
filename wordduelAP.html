@@ -126,7 +126,7 @@
             state.turn = otherPlayer;
 
             // Check for round advancement
-            if (state.Player1.spells.length === state.round && state.Player2.spells.length === state.round) {
+            if (state.player1.spells.length === state.round && state.player2.spells.length === state.round) {
             if (state.round === MAX_ROUNDS) {
             endGame(state);
             return;
