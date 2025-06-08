@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">   
+ <body>
  <head>
      <meta charset="UTF-8">
         <style>
@@ -11,8 +12,6 @@
             to { background-color: inherit; }
             }
         </style>
-
-        <body>
             <h1>Word Duel</h1>
             <div id="select-player">
                 <button onclick="choosePlayer('player1')"> I am player 1 (Lexa)</button>
@@ -111,8 +110,10 @@
 
            }
            if (!word) return;
+             function updateDisplay() {
 
             const state = getGameState();
+             }
 
             if (state.allSpells.includes(word)) {
             spellInput.classList.add('invalid');
@@ -125,7 +126,7 @@
             state.allSpells.push(word);
             state.turn = otherPlayer;
 
-            // Check for round advancement
+       
             if (state.player1.spells.length === state.round && state.player2.spells.length === state.round) {
             if (state.round === MAX_ROUNDS) {
             endGame(state);
