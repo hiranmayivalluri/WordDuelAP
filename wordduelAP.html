@@ -15,8 +15,8 @@
         <body>
             <h1>Word Duel</h1>
             <div id="select-player">
-                <button onclick="choosePlayer('Player1')"> I am Player 1 (Lexa)</button>
-                <button onclick="choosePlayer('Player2')"> I am Player 2 (Syntax)</button>
+                <button onclick="choosePlayer('player1')"> I am player 1 (Lexa)</button>
+                <button onclick="choosePlayer('player2')"> I am player 2 (Syntax)</button>
             </div>
             
           <div id="waiting">Waiting for both duelers to arrive...</div>
@@ -39,9 +39,9 @@
                 const MAX_ROUNDS = 3;
                 const spellInput = document.getElementById('spell');
                 const defaultState = {
-                Player1: { score: 0, spells: [] },
-                Player2: { score: 0, spells: [] },
-                turn: 'Player1',
+                player1: { score: 0, spells: [] },
+                player2: { score: 0, spells: [] },
+                turn: 'player1',
                 round: 1,
                 allSpells: []
                  };
