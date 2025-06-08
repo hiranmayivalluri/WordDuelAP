@@ -1,56 +1,135 @@
-<html>
-<head>
-    <meta charset="UTF8"
-    <title>WordDuel</title>
-    <h1>Chapter 1</h1>
-    <style>
-        body{
-            font-family: fantasy;
-            background:turquoise;
-            padding: 40px;
-            text-align: center;
-        }
-        button {
-      padding: 15px 30px;
-      font-size: 1.2em;
-      margin: 10px;
-      cursor: pointer;
-    }
-    #status{
-        margin-top: 30px;
-        font-size: 1.3em;
-        color:darkblue ;
-    }
-    </style>
-</head>
-    <body>
-        <h2>The Summoning Scroll</h2>
-        <p>Choose your role to play</p>
-           <button id="selectPlayer1">I am Player 1 (Lexa)</button>
-           <button id="selectPlayer2">I am Player 2 (Syntax)</button>
-        <div id="status"></div>
-             <script>
-                 const scrollKey = 'duelPlayers';
-                 function chooseRole(role) {
-                 let players = JSON.parse(localStorage.getItem(scrollKey)) || {};     
-                 
-                     if (players[role]) {
-                 alert(`${role === 'player1' ? 'Lexa' : 'Syntax'} has already entered the arena in another portal!`);
-                 return;
-                 players[role] = true;
-               
-                         localStorage.setItem(scrollKey, JSON.stringify(players));
-                const name = role === 'player1' ? 'Lexa' : 'Syntax';
-                sessionStorage.setItem('myRole', role); // Remember this tab's role
-                 document.getElementById('status').textContent = `✅ ${name} has entered the arena.`;
-                }
-                window.onload = () => {
-                const role = sessionStorage.getItem('myRole');
-                if (role) {
-                const name = role === 'player1' ? 'Lexa' : 'Syntax';
-                 document.getElementById('status').textContent = `✅ ${name} has returned to the arena.`;
-                }
+<!DOCTYPE html>
+<html lang="en">   
+ <head>
+     <meta charset="UTF-8">
+        <style>
+             body { font-family: fantasy; background: #4444be; color: white; text-align: center; padding: 20px; }
+             button, input { padding: 10px; margin: 5px; font-size: 1em; }
+             #wordInput { display: none; }
+             @keyframes flash {
+            from { background-color: rgb(43, 88, 39); }
+            to { background-color: inherit; }
+            }
+        </style>
+
+        <body>
+            <h1>Word Duel</h1>
+            <div id="select-player">
+                <button onclick="choosePlayer('Player1')"> I am Player 1 (Lexa)</button>
+                <button onclick="choosePlayer('Player2')"> I am Player 2 (Syntax)</button>
+            </div>
+            
+          <div id="waiting">Waiting for both duelers to arrive...</div>
+          <div id="countdown"></div>
+          <div id="game">
+            <h2 id="round">Round 1</h2>
+            <div id="turn-display"></div>
+               <input id="spell" placeholder="Cast your spell..." />
+               <button onclick="castSpell()">Cast</button>
+               <p id="log"></p>
+               <p id="score"></p>
+            </div>
+            <div id="result">
+                <h2 id="winner"></h2>
+            </div>
+            <script>
+                let player = null;
+                let otherPlayer = null;
+              
+                const MAX_ROUNDS = 3;
+                const spellInput = document.getElementById('spell');
+                const defaultState = {
+                Player1: { score: 0, spells: [] },
+                Player2: { score: 0, spells: [] },
+                turn: 'Player1',
+                round: 1,
+                allSpells: []
                  };
-            </script>  
-    </body>
+                    function getGameState() {
+                    return JSON.parse(localStorage.getItem('gameState')) || defaultState;
+                    }
+
+                    function saveGameState(state) {
+                    localStorage.setItem('gameState', JSON.stringify(state));
+                    }
+
+
+                    function choosePlayer(role) {
+                        if(localStorage.getItem(role)) {
+                        alert("That player is already taken");
+                    return;
+                    }
+                    
+
+                    player = role
+                    otherPlayer = role === 'player1' ? 'player2' : 'player1'
+                    localStorage.setItem(role,'joined'); 
+                    //saves the selection to local storage
+
+                     window.addEventListener('storage',() => {
+                     checkStart();
+                     updateDisplay();
+                    //wind of synchronization, change in local storage
+                     })
+                    }
+
+            function checkStart() {
+             const p1 = localStorage.getItem('player1');
+             const p2 = localStorage.getItem('player2');
+
+              if(p1 && p2) {
+                    startCountdown();
+                    //if both roles are filled in localStorage, the duel can begin. 
+                    //Called both when joining and from storage event.                             
+                }
+            }
+
+           function startCountdown() {
+            let count = 3;
+            const countdownEl = document.getElementById('countdown');
+            const interval = setInterval(() => {
+                //arrow function for a shorter syntax , for inline functions 
+                countdownEl.textContent = 'Battle begins in... $(count)';
+                count--;
+                if(count<0) {
+                    clearInterval(interval);
+                    startGame();
+                }
+            },1000)
+           }
+           const defaulState = {
+           player1:{score: 0, spells: [] },
+           // stores all critical data in one object State 
+           player2:{score: 0, spells: [] },
+           turn: player1;
+           round:1,
+           allSpells: []
+           };
+           
+           function castSpell() {
+            const word = spellInput.value.trim().toLowerCase();
+
+           }
+           if (!word) return;
+
+            const state = getGameState();
+
+            if (state.allSpells.includes(word)) {
+            spellInput.classList.add('invalid');
+            setTimeout(() => spellInput.classList.remove('invalid'), 500);
+            return;
+            }
+
+            state[player].spells.push(word);
+            state[player].score += word.length;
+            state.allSpells.push(word);
+            state.turn = otherPlayer;
+
+            // Check for round advancement
+            if (state.Player1.spells.length === state.round && state.Player2.spells.length === state.round) {
+            if (state.round === MAX_ROUNDS) {
+            endGame(state);
+            return;
+        </body>
+ </head>
 </html>
