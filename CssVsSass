@@ -26,6 +26,7 @@
                     <td>Performance</td>
                     <td>Native browser support</td>
                     <td>Needs to be compiled to CSS first</td>
+                </tr>
         </body>
     </head>
 </html>
